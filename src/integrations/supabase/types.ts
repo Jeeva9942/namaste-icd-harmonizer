@@ -14,7 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      processed_codes: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          file_id: string
+          icd11_bio_code: string | null
+          icd11_bio_term: string | null
+          icd11_tm2_code: string | null
+          icd11_tm2_term: string | null
+          id: string
+          mapping_status: string
+          namaste_code: string
+          namaste_term: string
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          file_id: string
+          icd11_bio_code?: string | null
+          icd11_bio_term?: string | null
+          icd11_tm2_code?: string | null
+          icd11_tm2_term?: string | null
+          id?: string
+          mapping_status?: string
+          namaste_code: string
+          namaste_term: string
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          file_id?: string
+          icd11_bio_code?: string | null
+          icd11_bio_term?: string | null
+          icd11_tm2_code?: string | null
+          icd11_tm2_term?: string | null
+          id?: string
+          mapping_status?: string
+          namaste_code?: string
+          namaste_term?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processed_codes_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "uploaded_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      uploaded_files: {
+        Row: {
+          file_size: number
+          filename: string
+          id: string
+          processed_records: number | null
+          processing_status: string
+          total_records: number | null
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          file_size: number
+          filename: string
+          id?: string
+          processed_records?: number | null
+          processing_status?: string
+          total_records?: number | null
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          file_size?: number
+          filename?: string
+          id?: string
+          processed_records?: number | null
+          processing_status?: string
+          total_records?: number | null
+          upload_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

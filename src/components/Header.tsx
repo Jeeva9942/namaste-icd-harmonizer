@@ -8,7 +8,7 @@ interface HeaderProps {
   onLogout: () => void;
   userInfo?: {
     name: string;
-    abhaId: string;
+    email: string;
   };
 }
 
@@ -36,7 +36,7 @@ export const Header = ({ isAuthenticated, onLogin, onLogout, userInfo }: HeaderP
                 <div className="text-sm">
                   <p className="font-medium">{userInfo?.name}</p>
                   <Badge variant="secondary" className="text-xs">
-                    ABHA: {userInfo?.abhaId}
+                    {userInfo?.email}
                   </Badge>
                 </div>
               </div>
@@ -49,7 +49,7 @@ export const Header = ({ isAuthenticated, onLogin, onLogout, userInfo }: HeaderP
             </>
           ) : (
             <Button onClick={onLogin} className="bg-primary hover:bg-primary-hover">
-              Login with ABHA
+              Login / Sign Up
             </Button>
           )}
         </div>

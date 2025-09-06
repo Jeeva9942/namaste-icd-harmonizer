@@ -5,27 +5,38 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Upload, FileText, CheckCircle, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { parseCSV } from "@/utils/csvProcessor";
 
 interface FileUploadProps {
-  onFileUpload: (file: File) => void;
+  onFileProcessed: (data: any[]) => void;
   isProcessing: boolean;
   uploadProgress: number;
 }
 
-export const FileUpload = ({ onFileUpload, isProcessing, uploadProgress }: FileUploadProps) => {
+export const FileUpload = ({ onFileProcessed, isProcessing, uploadProgress }: FileUploadProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  const processFile = useCallback(async (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const csvContent = e.target?.result as string;
+      const parsedData = parseCSV(csvContent);
+      onFileProcessed(parsedData);
+    };
+    reader.readAsText(file);
+  }, [onFileProcessed]);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
-    if (file && file.type === 'text/csv') {
+    if (file && (file.type === 'text/csv' || file.name.endsWith('.csv'))) {
       setUploadedFile(file);
       setUploadStatus('success');
-      onFileUpload(file);
+      processFile(file);
     } else {
       setUploadStatus('error');
     }
-  }, [onFileUpload]);
+  }, [processFile]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -105,12 +116,9 @@ export const FileUpload = ({ onFileUpload, isProcessing, uploadProgress }: FileU
 
         {uploadedFile && uploadStatus === 'success' && !isProcessing && (
           <div className="mt-6">
-            <Button 
-              onClick={() => onFileUpload(uploadedFile)} 
-              className="w-full bg-primary hover:bg-primary-hover"
-            >
-              Process CSV File
-            </Button>
+            <div className="text-center text-sm text-success font-medium">
+              ✓ File processed successfully! Check the results below.
+            </div>
           </div>
         )}
       </CardContent>
