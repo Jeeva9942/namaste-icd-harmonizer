@@ -265,9 +265,14 @@ export const Dashboard = () => {
 
         <TabsContent value="upload" className="space-y-6">
           <FileUpload 
-            onFileProcessed={handleFileProcessed}
-            isProcessing={isProcessing}
-            uploadProgress={uploadProgress}
+            onFileProcessed={(data) => {
+              setProcessedData(data);
+              // Generate FHIR bundle immediately
+              const bundle = generateFHIRBundle(data, user?.email || '');
+              setFhirBundle(bundle);
+              // Refresh user data to update stats
+              fetchUserData();
+            }}
           />
         </TabsContent>
 

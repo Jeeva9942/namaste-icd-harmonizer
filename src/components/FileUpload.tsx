@@ -2,30 +2,30 @@ import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Upload, FileText, CheckCircle, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { parseCSV } from "@/utils/csvProcessor";
+import { RealTimeProcessor } from "./RealTimeProcessor";
+import { ProcessedCode } from "@/utils/csvProcessor";
 
 interface FileUploadProps {
-  onFileProcessed: (data: any[]) => void;
-  isProcessing: boolean;
-  uploadProgress: number;
+  onFileProcessed: (data: ProcessedCode[]) => void;
 }
 
-export const FileUpload = ({ onFileProcessed, isProcessing, uploadProgress }: FileUploadProps) => {
+export const FileUpload = ({ onFileProcessed }: FileUploadProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [csvContent, setCsvContent] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const processFile = useCallback(async (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const csvContent = e.target?.result as string;
-      const parsedData = parseCSV(csvContent);
-      onFileProcessed(parsedData);
+      const content = e.target?.result as string;
+      setCsvContent(content);
+      setIsProcessing(true);
     };
     reader.readAsText(file);
-  }, [onFileProcessed]);
+  }, []);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -104,21 +104,16 @@ export const FileUpload = ({ onFileProcessed, isProcessing, uploadProgress }: Fi
           )}
         </div>
 
-        {isProcessing && (
-          <div className="mt-6 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Processing NAMASTE codes...</span>
-              <span>{uploadProgress}%</span>
-            </div>
-            <Progress value={uploadProgress} className="w-full" />
-          </div>
-        )}
-
-        {uploadedFile && uploadStatus === 'success' && !isProcessing && (
+        {isProcessing && csvContent && (
           <div className="mt-6">
-            <div className="text-center text-sm text-success font-medium">
-              ✓ File processed successfully! Check the results below.
-            </div>
+            <RealTimeProcessor 
+              csvContent={csvContent}
+              filename={uploadedFile?.name || "uploaded_file.csv"}
+              onProcessingComplete={(data) => {
+                onFileProcessed(data);
+                setIsProcessing(false);
+              }}
+            />
           </div>
         )}
       </CardContent>
