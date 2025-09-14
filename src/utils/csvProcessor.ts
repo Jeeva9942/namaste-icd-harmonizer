@@ -77,28 +77,83 @@ const generateICD11Mapping = (namcCode: string): { tm2?: string; bio?: string; t
 
 export const parseCSV = (csvContent: string): NameasteRow[] => {
   const lines = csvContent.split('\n').filter(line => line.trim());
-  if (lines.length === 0) return [];
+  
+  // More robust CSV parsing
+  if (lines.length === 0) {
+    console.log("No lines found in CSV");
+    return [];
+  }
 
-  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  // Handle different CSV formats and delimiters
+  const detectDelimiter = (line: string): string => {
+    const commaCount = (line.match(/,/g) || []).length;
+    const semicolonCount = (line.match(/;/g) || []).length;
+    const tabCount = (line.match(/\t/g) || []).length;
+    
+    if (semicolonCount > commaCount && semicolonCount > tabCount) return ';';
+    if (tabCount > commaCount && tabCount > semicolonCount) return '\t';
+    return ',';
+  };
+
+  const delimiter = detectDelimiter(lines[0]);
+  console.log(`Detected delimiter: "${delimiter}"`);
+
+  // Parse CSV with proper quote handling
+  const parseCSVLine = (line: string, delimiter: string): string[] => {
+    const result: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+      
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          current += '"';
+          i++; // Skip next quote
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === delimiter && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    
+    result.push(current.trim());
+    return result;
+  };
+
+  const headers = parseCSVLine(lines[0], delimiter);
+  console.log(`Headers found: ${headers.length}`, headers);
+  
   const rows: NameasteRow[] = [];
 
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-    if (values.length >= 2) {
+    const values = parseCSVLine(lines[i], delimiter);
+    
+    // More flexible parsing - accept rows with at least one non-empty value
+    if (values.some(v => v.length > 0)) {
       const row: NameasteRow = {
-        namaste_code: values[0] || `NAM${String(i).padStart(3, '0')}`,
-        namaste_term: values[1] || `Term ${i}`,
+        namaste_code: values[0]?.trim() || `NAM${String(i).padStart(3, '0')}`,
+        namaste_term: values[1]?.trim() || `Term ${i}`,
       };
 
       // Add any additional columns
       for (let j = 2; j < Math.min(values.length, headers.length); j++) {
-        row[headers[j]] = values[j];
+        if (headers[j] && values[j]) {
+          row[headers[j]] = values[j].trim();
+        }
       }
 
       rows.push(row);
     }
   }
 
+  console.log(`Parsed ${rows.length} rows from CSV`);
   return rows;
 };
 

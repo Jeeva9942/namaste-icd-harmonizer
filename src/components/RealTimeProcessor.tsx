@@ -30,15 +30,23 @@ export const RealTimeProcessor = ({ csvContent, filename, onProcessingComplete }
     try {
       setHasError(false);
       setProgress(0);
+      setCurrentStep("Initializing processor...");
+      
+      // Add small delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
       setCurrentStep("Parsing CSV file...");
+      setProgress(5);
 
-      // Parse CSV
+      // Parse CSV with better error handling
       const namasteData: NameasteRow[] = parseCSV(csvContent);
+      console.log(`Processing ${namasteData.length} records`);
+      
       setTotalCount(namasteData.length);
-      setProgress(10);
+      setProgress(15);
 
       if (namasteData.length === 0) {
-        throw new Error("No valid data found in CSV file");
+        throw new Error("No valid data found in CSV file. Please check the format and ensure it has at least two columns (code, term).");
       }
 
       setCurrentStep("Creating file record...");
@@ -61,8 +69,8 @@ export const RealTimeProcessor = ({ csvContent, filename, onProcessingComplete }
 
       setCurrentStep("Processing NAMASTE codes...");
       
-      // Process codes in batches for real-time updates
-      const batchSize = 10;
+      // Process codes in smaller batches for smoother real-time updates
+      const batchSize = Math.max(1, Math.min(5, Math.ceil(namasteData.length / 20)));
       const allProcessedCodes: ProcessedCode[] = [];
       
       for (let i = 0; i < namasteData.length; i += batchSize) {
@@ -71,10 +79,14 @@ export const RealTimeProcessor = ({ csvContent, filename, onProcessingComplete }
         allProcessedCodes.push(...processedBatch);
         
         setProcessedCount(allProcessedCodes.length);
-        setProgress(20 + (allProcessedCodes.length / namasteData.length) * 60);
+        const processingProgress = (allProcessedCodes.length / namasteData.length) * 65;
+        setProgress(20 + processingProgress);
         
-        // Small delay to show real-time progress
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Update step with more detail
+        setCurrentStep(`Processing NAMASTE codes... (${allProcessedCodes.length}/${namasteData.length})`);
+        
+        // Shorter delay for smoother progress
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
 
       setCurrentStep("Saving to database...");
@@ -149,50 +161,77 @@ export const RealTimeProcessor = ({ csvContent, filename, onProcessingComplete }
   }, [csvContent, isComplete, hasError, processInRealTime]);
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          {isComplete ? (
-            <CheckCircle className="h-5 w-5 text-success" />
-          ) : hasError ? (
-            <AlertCircle className="h-5 w-5 text-destructive" />
-          ) : (
-            <RefreshCw className="h-5 w-5 text-primary animate-spin" />
-          )}
-          <span>Real-Time CSV Processing</span>
+    <Card className="w-full border-border/50 shadow-lg bg-gradient-to-br from-card to-card/80">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center space-x-3">
+          <div className="relative">
+            {isComplete ? (
+              <CheckCircle className="h-6 w-6 text-success animate-in zoom-in-75 duration-500" />
+            ) : hasError ? (
+              <AlertCircle className="h-6 w-6 text-destructive animate-pulse" />
+            ) : (
+              <div className="relative">
+                <RefreshCw className="h-6 w-6 text-primary animate-spin" />
+                <div className="absolute inset-0 h-6 w-6 bg-primary/20 rounded-full animate-ping" />
+              </div>
+            )}
+          </div>
+          <span className="text-lg font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Real-Time CSV Processing
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span>{currentStep}</span>
-            <span>{Math.round(progress)}%</span>
+        <div className="space-y-3">
+          <div className="flex justify-between text-sm font-medium">
+            <span className="text-muted-foreground">{currentStep}</span>
+            <span className="text-primary">{Math.round(progress)}%</span>
           </div>
-          <Progress value={progress} className="w-full" />
+          <div className="relative">
+            <Progress value={progress} className="w-full h-3 bg-muted" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/5 rounded-full opacity-50" />
+          </div>
         </div>
 
         {totalCount > 0 && (
-          <div className="flex items-center justify-between text-sm">
-            <span>Processing codes:</span>
-            <Badge variant={isComplete ? "default" : "secondary"}>
+          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border/30">
+            <span className="text-sm font-medium text-muted-foreground">Processing codes:</span>
+            <Badge 
+              variant={isComplete ? "default" : "secondary"} 
+              className={`transition-all duration-300 ${
+                isComplete ? 'bg-success text-success-foreground animate-pulse' : 
+                'bg-primary/10 text-primary border border-primary/20'
+              }`}
+            >
               {processedCount} / {totalCount}
             </Badge>
           </div>
         )}
 
         {isComplete && (
-          <div className="p-3 bg-success/10 border border-success/20 rounded-lg">
-            <p className="text-sm text-success-foreground">
-              ✓ Successfully processed {processedCount} NAMASTE codes with ICD-11 mappings
-            </p>
+          <div className="p-4 bg-success/10 border border-success/20 rounded-lg animate-in fade-in-50 duration-500">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-5 w-5 text-success" />
+              <p className="text-sm font-medium text-success-foreground">
+                Successfully processed {processedCount} NAMASTE codes with ICD-11 mappings
+              </p>
+            </div>
           </div>
         )}
 
         {hasError && (
-          <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-            <p className="text-sm text-destructive-foreground">
-              ✗ Processing failed. Please check your CSV format and try again.
-            </p>
+          <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg animate-in fade-in-50 duration-500">
+            <div className="flex items-center space-x-2">
+              <AlertCircle className="h-5 w-5 text-destructive" />
+              <div>
+                <p className="text-sm font-medium text-destructive-foreground">
+                  Processing failed
+                </p>
+                <p className="text-xs text-destructive-foreground/80 mt-1">
+                  Please ensure your CSV has proper format with code and term columns
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </CardContent>

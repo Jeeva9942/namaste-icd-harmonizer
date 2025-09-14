@@ -36,6 +36,11 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
+    /* Real-time processing specific colors */
+    --processing-bg: 200 100% 97%;
+    --processing-border: 200 100% 85%;
+    --progress-glow: 200 100% 40%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
