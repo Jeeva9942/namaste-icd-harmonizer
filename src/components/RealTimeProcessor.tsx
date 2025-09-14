@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -142,11 +142,11 @@ export const RealTimeProcessor = ({ csvContent, filename, onProcessingComplete }
   }, [csvContent, filename, user, onProcessingComplete, toast]);
 
   // Auto-start processing when component mounts
-  useState(() => {
+  useEffect(() => {
     if (csvContent && !isComplete && !hasError) {
       processInRealTime();
     }
-  });
+  }, [csvContent, isComplete, hasError, processInRealTime]);
 
   return (
     <Card className="w-full">
