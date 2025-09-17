@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
+import { N8nRagChatbot } from "@/components/N8nRagChatbot";
 import Home from "./pages/Home";
 import Converter from "./pages/Converter";
 import ApiDocs from "./pages/ApiDocs";
@@ -41,6 +42,7 @@ const App = () => (
                   </main>
                 </div>
               </div>
+              <N8nRagChatbot />
             </SidebarProvider>
           } />
         </Routes>
