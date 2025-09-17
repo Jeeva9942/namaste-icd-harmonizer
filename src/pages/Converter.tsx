@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Header } from "@/components/Header";
 import { Dashboard } from "@/components/Dashboard";
 import { useAuth } from "@/hooks/useAuth";
 
-const Index = () => {
-  const { user, loading, signOut, isAuthenticated } = useAuth();
+const Converter = () => {
+  const { user, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,21 +13,12 @@ const Index = () => {
     }
   }, [loading, isAuthenticated, navigate]);
 
-  const handleLogin = () => {
-    navigate("/auth");
-  };
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/auth");
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">Loading converter...</p>
         </div>
       </div>
     );
@@ -40,16 +30,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header 
-        isAuthenticated={isAuthenticated}
-        onLogin={handleLogin}
-        onLogout={handleLogout}
-        userInfo={{ name: user?.user_metadata?.full_name || user?.email || "User", email: user?.email || "" }}
-      />
-      
-      <Dashboard />
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-foreground mb-4">NAMASTE to ICD-11 Converter</h1>
+          <p className="text-xl text-muted-foreground">
+            Upload your CSV files containing NAMASTE codes and convert them to ICD-11 standards with FHIR bundle generation.
+          </p>
+        </div>
+        <Dashboard />
+      </div>
     </div>
   );
 };
 
-export default Index;
+export default Converter;
