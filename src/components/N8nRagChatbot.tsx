@@ -19,7 +19,7 @@ export const N8nRagChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hello! I'm your AI assistant powered by n8n RAG. How can I help you today?",
+      text: "Hello! I'm your AI Assistant. How can I help you today?",
       isUser: false,
       timestamp: new Date()
     }
@@ -134,7 +134,7 @@ export const N8nRagChatbot = () => {
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
               <MessageCircle className="h-5 w-5 text-primary" />
-              n8n RAG Assistant
+              AI AGENT
             </CardTitle>
             <div className="flex items-center gap-2">
               <Button
