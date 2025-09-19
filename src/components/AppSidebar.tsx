@@ -1,16 +1,9 @@
-import { Home, FileText, Book, Bell } from "lucide-react";
+import { Home, FileText, Book, Bell, Menu, X, Activity } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const navigationItems = [
   { title: "Home", url: "/", icon: Home },
@@ -20,10 +13,10 @@ const navigationItems = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
-  const collapsed = state === "collapsed";
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
 
   const isActive = (path: string) => {
     if (path === "/") return currentPath === "/";
@@ -32,37 +25,98 @@ export function AppSidebar() {
 
   const getNavClasses = (path: string) => {
     return isActive(path) 
-      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" 
-      : "hover:bg-sidebar-accent/50 text-sidebar-foreground";
+      ? "bg-primary text-primary-foreground font-medium" 
+      : "hover:bg-accent text-foreground";
   };
 
+  const NavLinks = () => (
+    <>
+      {navigationItems.map((item) => (
+        <NavLink
+          key={item.title}
+          to={item.url}
+          end={item.url === "/"}
+          className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 ${getNavClasses(item.url)} hover:scale-105`}
+          onClick={() => setIsOpen(false)}
+        >
+          <item.icon className="h-5 w-5 flex-shrink-0" />
+          <span className="font-medium">{item.title}</span>
+        </NavLink>
+      ))}
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Activity className="h-8 w-8 text-primary" />
+              <h1 className="text-xl font-bold text-primary">AyuBridge Health</h1>
+            </div>
+            
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center gap-3 text-left">
+                    <Activity className="h-6 w-6 text-primary" />
+                    AyuBridge Health
+                  </SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-3 mt-8">
+                  <NavLinks />
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible="icon">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-primary font-semibold text-lg mb-4">
-            {!collapsed && "AyuBridge Health"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      end={item.url === "/"}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${getNavClasses(item.url)}`}
-                    >
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Activity className="h-8 w-8 text-primary" />
+            <h1 className="text-xl font-bold text-primary">AyuBridge Health</h1>
+          </div>
+          
+          <nav className="hidden md:flex items-center gap-2">
+            <NavLinks />
+          </nav>
+
+          <div className="md:hidden">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center gap-3 text-left">
+                    <Activity className="h-6 w-6 text-primary" />
+                    AyuBridge Health
+                  </SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-3 mt-8">
+                  <NavLinks />
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }

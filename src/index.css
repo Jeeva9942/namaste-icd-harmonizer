@@ -152,11 +152,53 @@ All colors MUST be HSL.
   }
 }
 
-/* Responsive design improvements */
-@media (max-width: 768px) {
+/* Responsive design adjustments */
+@media (max-width: 640px) {
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+  
+  /* Navigation adjustments */
+  .sidebar-mobile {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  /* Typography scaling */
+  h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  /* Button adjustments */
+  .btn-mobile {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Card spacing */
+  .card-mobile {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Form elements */
+  .form-mobile {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Additional tablet adjustments */
+  .grid-mobile {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
 

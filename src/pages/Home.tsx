@@ -1,141 +1,223 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Zap, Shield, Globe } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight, Heart, Shield, Zap, Globe, Users, Activity, BookOpen, FileText, Stethoscope } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-medical-tech.jpg";
 import collaborationImage from "@/assets/healthcare-collaboration.jpg";
-import logoImage from "@/assets/ayubridge-logo.jpg";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 -mt-6">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 md:py-32 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="flex items-center gap-4 mb-6">
-                <img 
-                  src={logoImage} 
-                  alt="AyuBridge Health Logo" 
-                  className="w-16 h-16 rounded-lg shadow-lg"
-                />
-                <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  AyuBridge Health
+      <section className="relative py-12 sm:py-20 lg:py-32">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+            <div className="space-y-6 sm:space-y-8">
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent leading-tight">
+                  Bridge Traditional & Modern Healthcare
                 </h1>
+                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                  Seamlessly convert between ICD-11 and AYUSH medical codes with our advanced AI-powered platform. 
+                  Enhancing healthcare interoperability across traditional and modern medicine systems.
+                </p>
               </div>
-              
-              <h2 className="text-2xl md:text-4xl font-semibold text-foreground leading-tight">
-                Bridging Traditional Medicine with Modern Healthcare
-              </h2>
-              
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                Seamlessly convert NAMASTE codes to ICD-11 standards. Harmonizing Ayurveda with global healthcare systems for better patient care and research.
-              </p>
-              
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/converter">
-                  <Button className="text-lg px-8 py-3 bg-gradient-to-r from-primary to-accent hover:from-primary-hover hover:to-accent/90 transition-all duration-300">
-                    Start Converting
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                <Link to="/api-docs">
-                  <Button variant="outline" className="text-lg px-8 py-3 border-primary/20 hover:bg-primary/10">
-                    View API Docs
-                  </Button>
-                </Link>
+                <Button asChild size="lg" className="text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto">
+                  <Link to="/converter">
+                    Start Converting <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild className="text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto">
+                  <Link to="/api-docs">
+                    <BookOpen className="mr-2 h-5 w-5" />
+                    API Docs
+                  </Link>
+                </Button>
               </div>
             </div>
-            
-            <div className="relative">
+            <div className="lg:order-last">
               <img 
                 src={heroImage} 
-                alt="Medical Technology Innovation" 
-                className="w-full h-auto rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                alt="Modern healthcare technology integration" 
+                className="w-full h-auto rounded-2xl shadow-2xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-2xl"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 md:px-8 bg-muted/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Empowering Healthcare Transformation
-            </h3>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our platform provides cutting-edge tools for healthcare data harmonization, ensuring seamless integration between traditional and modern medical systems.
+      <section className="py-12 sm:py-20 bg-secondary/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-4">
+              Powerful Features for Healthcare Integration
+            </h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4 sm:px-0">
+              Experience the future of medical coding with our comprehensive suite of tools designed for healthcare professionals.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Zap className="h-8 w-8 text-white" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <Card className="p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <CardHeader className="text-center pb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
                 </div>
-                <h4 className="text-2xl font-semibold mb-4">Lightning Fast</h4>
-                <p className="text-muted-foreground">
-                  Convert thousands of NAMASTE codes to ICD-11 in seconds with our optimized processing engine.
-                </p>
+                <CardTitle className="text-lg sm:text-xl">Lightning Fast</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <CardDescription className="text-center text-sm sm:text-base">
+                  Convert thousands of medical codes in seconds with our optimized processing engine.
+                </CardDescription>
               </CardContent>
             </Card>
-            
-            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-medical-teal to-medical-green rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="h-8 w-8 text-white" />
+
+            <Card className="p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <CardHeader className="text-center pb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
                 </div>
-                <h4 className="text-2xl font-semibold mb-4">Secure & Reliable</h4>
-                <p className="text-muted-foreground">
-                  Enterprise-grade security with 99.9% uptime. Your healthcare data is protected with industry-leading encryption.
-                </p>
+                <CardTitle className="text-lg sm:text-xl">Secure & Compliant</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <CardDescription className="text-center text-sm sm:text-base">
+                  HIPAA compliant platform ensuring your medical data remains protected and secure.
+                </CardDescription>
               </CardContent>
             </Card>
-            
-            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-accent to-medical-blue rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Globe className="h-8 w-8 text-white" />
+
+            <Card className="p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 sm:col-span-2 lg:col-span-1">
+              <CardHeader className="text-center pb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
                 </div>
-                <h4 className="text-2xl font-semibold mb-4">Global Standards</h4>
-                <p className="text-muted-foreground">
-                  Full compliance with WHO ICD-11 standards, enabling seamless integration with global healthcare systems.
-                </p>
+                <CardTitle className="text-lg sm:text-xl">AI-Powered</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <CardDescription className="text-center text-sm sm:text-base">
+                  Advanced machine learning algorithms ensure accurate code mapping and suggestions.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <CardHeader className="text-center pb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Globe className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                </div>
+                <CardTitle className="text-lg sm:text-xl">Global Standards</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <CardDescription className="text-center text-sm sm:text-base">
+                  Support for international medical coding standards including ICD-11 and AYUSH systems.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <CardHeader className="text-center pb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Users className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                </div>
+                <CardTitle className="text-lg sm:text-xl">Collaborative</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <CardDescription className="text-center text-sm sm:text-base">
+                  Team-friendly features for healthcare organizations and research institutions.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <CardHeader className="text-center pb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                </div>
+                <CardTitle className="text-lg sm:text-xl">Real-time Analytics</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <CardDescription className="text-center text-sm sm:text-base">
+                  Monitor conversion accuracy and track usage patterns with detailed analytics.
+                </CardDescription>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Mission Section */}
+      <section className="py-12 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
               <img 
                 src={collaborationImage} 
-                alt="Healthcare Collaboration" 
+                alt="Healthcare collaboration between traditional and modern medicine" 
                 className="w-full h-auto rounded-2xl shadow-xl"
               />
             </div>
-            <div className="space-y-6">
-              <h3 className="text-3xl md:text-4xl font-bold text-foreground">
-                Ready to Transform Your Healthcare Data?
-              </h3>
-              <p className="text-xl text-muted-foreground">
-                Join thousands of healthcare professionals who trust AyuBridge Health for their medical coding needs. Experience the future of healthcare data harmonization today.
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary">
+                Bridging Ancient Wisdom with Modern Science
+              </h2>
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+                AyuBridge Health is dedicated to creating seamless integration between traditional AYUSH 
+                medicine systems and modern healthcare protocols. Our mission is to preserve the valuable 
+                knowledge of traditional medicine while making it accessible and compatible with contemporary 
+                medical practices.
               </p>
-              <Link to="/converter">
-                <Button className="text-lg px-8 py-3 bg-gradient-to-r from-primary to-accent hover:from-primary-hover hover:to-accent/90 transition-all duration-300">
-                  Get Started Now
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    <strong className="text-foreground">Preserve Traditional Knowledge:</strong> Maintain the integrity 
+                    of ancient medical wisdom while adapting to modern standards.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    <strong className="text-foreground">Enhance Interoperability:</strong> Enable seamless communication 
+                    between different healthcare systems and practitioners.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    <strong className="text-foreground">Improve Patient Care:</strong> Facilitate better treatment 
+                    outcomes through integrated approach to healthcare.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-12 sm:py-20 bg-primary/5">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary">
+              Ready to Transform Healthcare Integration?
+            </h2>
+            <p className="text-lg sm:text-xl text-muted-foreground px-4 sm:px-0">
+              Join thousands of healthcare professionals who trust AyuBridge Health for 
+              accurate medical code conversion and seamless system integration.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto">
+                <Link to="/converter">
+                  <Stethoscope className="mr-2 h-5 w-5" />
+                  Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto">
+                <FileText className="mr-2 h-5 w-5" />
+                Learn More
+              </Button>
             </div>
           </div>
         </div>
