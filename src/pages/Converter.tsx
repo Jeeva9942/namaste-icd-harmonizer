@@ -40,20 +40,23 @@ const Converter = () => {
           </p>
         </div>
         
-        <Tabs defaultValue="search" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="search">Search Codes</TabsTrigger>
-            <TabsTrigger value="upload">Batch Upload</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="search">
+        <div className="space-y-8">
+          {/* Search Codes Section */}
+          <div>
             <NamasteCodeSearch />
-          </TabsContent>
-
-          <TabsContent value="upload">
+          </div>
+          
+          {/* Batch Upload Section */}
+          <div className="border-t pt-8">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-2">Batch Upload</h2>
+              <p className="text-muted-foreground">
+                Upload CSV files for bulk conversion with FHIR bundle generation.
+              </p>
+            </div>
             <Dashboard />
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

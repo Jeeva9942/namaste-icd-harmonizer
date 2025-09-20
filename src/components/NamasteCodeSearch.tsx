@@ -20,14 +20,34 @@ export const NamasteCodeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [showSamples, setShowSamples] = useState(true);
+
+  // Generate sample results
+  const getSampleResults = (): SearchResult[] => {
+    const sampleCodes = namcCodes.slice(0, 3);
+    return sampleCodes.map(entry => {
+      const icd11Mapping = generateICD11Mapping(entry.NAMC_CODE);
+      return {
+        namaste_code: entry.NAMC_CODE,
+        namaste_term: entry.NAMC_term,
+        icd11_tm2_code: icd11Mapping.tm2_code,
+        icd11_tm2_term: icd11Mapping.tm2_term,
+        icd11_bio_code: icd11Mapping.bio_code,
+        icd11_bio_term: icd11Mapping.bio_term,
+        confidence_score: icd11Mapping.confidence
+      };
+    });
+  };
 
   useEffect(() => {
     const performSearch = async () => {
       if (!searchTerm.trim()) {
         setSearchResults([]);
+        setShowSamples(true);
         return;
       }
 
+      setShowSamples(false);
       setIsSearching(true);
       
       // Simulate search delay for better UX
@@ -116,10 +136,12 @@ export const NamasteCodeSearch = () => {
         </CardContent>
       </Card>
 
-      {searchResults.length > 0 && (
+      {(searchResults.length > 0 || showSamples) && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Search Results</h3>
-          {searchResults.map((result, index) => (
+          <h3 className="text-lg font-semibold">
+            {showSamples ? "Sample NAMASTE Code Mappings" : "Search Results"}
+          </h3>
+          {(showSamples ? getSampleResults() : searchResults).map((result, index) => (
             <Card key={index} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="grid gap-4">
@@ -188,7 +210,7 @@ export const NamasteCodeSearch = () => {
         </div>
       )}
 
-      {searchTerm && !isSearching && searchResults.length === 0 && (
+      {searchTerm && !isSearching && searchResults.length === 0 && !showSamples && (
         <Card>
           <CardContent className="p-8 text-center">
             <Search className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
