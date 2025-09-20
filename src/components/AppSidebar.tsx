@@ -53,7 +53,7 @@ export function AppSidebar() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-3">
               <Activity className="h-8 w-8 text-primary" />
-              <h1 className="text-xl font-bold text-primary">AyuBridge Health</h1>
+              <h1 className="text-xl font-bold text-primary">AyushBridge Health</h1>
             </div>
             
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
