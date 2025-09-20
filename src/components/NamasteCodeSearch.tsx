@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, Code, BookOpen } from "lucide-react";
@@ -20,7 +21,7 @@ export const NamasteCodeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [showSamples, setShowSamples] = useState(true);
+  const [showSamples, setShowSamples] = useState(false);
 
   // Generate sample results
   const getSampleResults = (): SearchResult[] => {
@@ -43,7 +44,7 @@ export const NamasteCodeSearch = () => {
     const performSearch = async () => {
       if (!searchTerm.trim()) {
         setSearchResults([]);
-        setShowSamples(true);
+        setShowSamples(false);
         return;
       }
 
@@ -100,6 +101,11 @@ export const NamasteCodeSearch = () => {
     return () => clearTimeout(debounceTimer);
   }, [searchTerm]);
 
+  const handleSearchClick = () => {
+    setShowSamples(true);
+    setSearchResults([]);
+  };
+
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.8) return "bg-green-500";
     if (confidence >= 0.6) return "bg-yellow-500";
@@ -116,14 +122,20 @@ export const NamasteCodeSearch = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search NAMASTE codes or terms..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search NAMASTE codes or terms..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Button onClick={handleSearchClick} className="px-6">
+              <Search className="h-4 w-4 mr-2" />
+              Search
+            </Button>
           </div>
           
           {searchTerm && (
