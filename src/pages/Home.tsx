@@ -163,7 +163,7 @@ const Home = () => {
                 Bridging Ancient Wisdom with Modern Science
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                AyuBridge Health is dedicated to creating seamless integration between traditional AYUSH 
+                AyushBridge is dedicated to creating seamless integration between traditional AYUSH 
                 medicine systems and modern healthcare protocols. Our mission is to preserve the valuable 
                 knowledge of traditional medicine while making it accessible and compatible with contemporary 
                 medical practices.
@@ -204,7 +204,7 @@ const Home = () => {
               Ready to Transform Healthcare Integration?
             </h2>
             <p className="text-lg sm:text-xl text-muted-foreground px-4 sm:px-0">
-              Join thousands of healthcare professionals who trust AyuBridge Health for 
+              Join thousands of healthcare professionals who trust AyushBridge for 
               accurate medical code conversion and seamless system integration.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

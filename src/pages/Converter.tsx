@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dashboard } from "@/components/Dashboard";
+import { NamasteCodeSearch } from "@/components/NamasteCodeSearch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 
 const Converter = () => {
@@ -34,10 +36,24 @@ const Converter = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">NAMASTE to ICD-11 Converter</h1>
           <p className="text-xl text-muted-foreground">
-            Upload your CSV files containing NAMASTE codes and convert them to ICD-11 standards with FHIR bundle generation.
+            Search NAMASTE codes for instant ICD-11 mapping or upload CSV files for batch conversion with FHIR bundle generation.
           </p>
         </div>
-        <Dashboard />
+        
+        <Tabs defaultValue="search" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="search">Search Codes</TabsTrigger>
+            <TabsTrigger value="upload">Batch Upload</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="search">
+            <NamasteCodeSearch />
+          </TabsContent>
+
+          <TabsContent value="upload">
+            <Dashboard />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

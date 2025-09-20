@@ -42,7 +42,7 @@ const namcTermMap = new Map<string, NAMCCode>();
 });
 
 // Generate ICD-11 mappings based on NAMC codes
-const generateICD11Mapping = (namcCode: string): { tm2?: string; bio?: string; tm2_term?: string; bio_term?: string } => {
+export const generateICD11Mapping = (namcCode: string): { tm2_code?: string; bio_code?: string; tm2_term?: string; bio_term?: string; confidence?: number } => {
   // Simple mapping logic - in reality this would be more sophisticated
   const hash = namcCode.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
   const tm2Variants = ['TM2.001', 'TM2.002', 'TM2.003', 'TM2.004', 'TM2.005', 'TM2.006'];
@@ -68,10 +68,11 @@ const generateICD11Mapping = (namcCode: string): { tm2?: string; bio?: string; t
   const bioIndex = hash % bioVariants.length;
   
   return {
-    tm2: tm2Variants[tm2Index],
-    bio: bioVariants[bioIndex],
+    tm2_code: tm2Variants[tm2Index],
+    bio_code: bioVariants[bioIndex],
     tm2_term: tm2Terms[tm2Index],
-    bio_term: bioTerms[bioIndex]
+    bio_term: bioTerms[bioIndex],
+    confidence: 0.85
   };
 };
 
@@ -184,10 +185,10 @@ export const processCodeMappings = (namasteRows: NameasteRow[]): ProcessedCode[]
     let confidence_score = 0.0;
     
     if (foundNamcCode) {
-      if (icd11Mapping.tm2 && icd11Mapping.bio) {
+      if (icd11Mapping.tm2_code && icd11Mapping.bio_code) {
         mapping_status = 'mapped';
         confidence_score = 0.92;
-      } else if (icd11Mapping.tm2 || icd11Mapping.bio) {
+      } else if (icd11Mapping.tm2_code || icd11Mapping.bio_code) {
         mapping_status = 'partial';
         confidence_score = 0.68;
       } else {
@@ -196,10 +197,10 @@ export const processCodeMappings = (namasteRows: NameasteRow[]): ProcessedCode[]
       }
     } else {
       // Even without NAMC match, we can still provide ICD-11 mappings
-      if (icd11Mapping.tm2 && icd11Mapping.bio) {
+      if (icd11Mapping.tm2_code && icd11Mapping.bio_code) {
         mapping_status = 'mapped';
         confidence_score = 0.75;
-      } else if (icd11Mapping.tm2 || icd11Mapping.bio) {
+      } else if (icd11Mapping.tm2_code || icd11Mapping.bio_code) {
         mapping_status = 'partial';
         confidence_score = 0.55;
       }
@@ -208,9 +209,9 @@ export const processCodeMappings = (namasteRows: NameasteRow[]): ProcessedCode[]
     return {
       namaste_code,
       namaste_term: foundNamcCode?.NAMC_term || namaste_term,
-      icd11_tm2_code: icd11Mapping.tm2 || '',
+      icd11_tm2_code: icd11Mapping.tm2_code || '',
       icd11_tm2_term: icd11Mapping.tm2_term || '',
-      icd11_bio_code: icd11Mapping.bio || '',
+      icd11_bio_code: icd11Mapping.bio_code || '',
       icd11_bio_term: icd11Mapping.bio_term || '',
       confidence_score,
       mapping_status

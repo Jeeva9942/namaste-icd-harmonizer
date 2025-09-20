@@ -22,7 +22,7 @@ export const Header = ({ isAuthenticated, onLogin, onLogout, userInfo }: HeaderP
               <span className="text-primary-foreground font-bold text-sm">M</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">Medical Terminology System</h1>
+              <h1 className="text-xl font-bold text-foreground">AyushBridge</h1>
               <p className="text-sm text-muted-foreground">NAMASTE ↔ ICD-11 Integration</p>
             </div>
           </div>
